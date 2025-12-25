@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAppContext } from '../context/AppContext'
 import { assets } from '../assets/assets'
 const Navbar = () => {
-  const {user,setShowLogin}=useAppContext()
+  const {user, setShowLogin, logout, credit, loadCreditData}=useAppContext()
   const navigate=useNavigate()
   return (
     <div className="flex items-center justify-between py-4">
@@ -13,13 +13,12 @@ const Navbar = () => {
       <div>
         {user ? (
           <div className="flex items-center justify-center text-center gap-2 sm:gap-3">
-            <button
+            <button onClick={()=>{loadCreditData(); navigate('/buycredit')}}
               className="flex items-center gap-2 bg-blue-100 px-4 sm:px-6 py-1.5 sm:py-3 rounded-full hover:scale-105 transition"
-              onClick={() => navigate("/buy")}
             >
               <img src={assets.credit_star} className="w-5" />
               <p className="text-xs sm:text-sm font-md text-gray-600">
-                Credits left : 50
+               Credits left: {credit}
               </p>
             </button>
             <p className="text-gray-600 max-sm:hidden pl-4">Hi, {user.name}</p>
@@ -27,14 +26,14 @@ const Navbar = () => {
               <img src={assets.profile_icon} className="w-10 drop-shadow" />
               <div className="absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-12">
                 <ul className="list-none m-0 p-2 bg-white rounded-md border text-sm">
-                  <li className="px-2 py-1 cursor-pointer pr-10">Logout</li>
+                  <li onClick={logout} className="px-2 py-1 cursor-pointer pr-10">Logout</li>
                 </ul>
               </div>
             </div>
           </div>
         ) : (
           <div className="flex items-center gap-2 sm:gap-5">
-            <p className="cursor-pointer" onClick={() => navigate("/buy")}>
+            <p className="cursor-pointer" onClick={() => navigate("/buycredit")}>
               Pricing
             </p>
             <button

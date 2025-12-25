@@ -1,18 +1,50 @@
 import React, { useState } from 'react'
 import { assets } from '../assets/assets'
 import { motion } from 'motion/react'
+import { toast } from 'react-toastify'
+import axios from 'axios'
+import { useAppContext } from '../context/AppContext'
 const Result = () => {
-  const [isImageLoaded,setIsImageLoaded]=useState(false)
-  const [loading,setLoading]=useState(false)
-  const [image,setImage]=useState(assets.sample_img_1)
-  const [input,setInput]=useState("")
+  const [isImageLoaded, setIsImageLoaded] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [image, setImage] = useState(assets.sample_img_1)
+  const [input, setInput] = useState("")
+  const {token,loadCreditData,backendURL,credit}=useAppContext()
+  const generateImage = async (prompt) => {
+    try {
+      const { data } = await axios.post(backendURL + '/api/image/generate', { prompt }, { headers: { token } })
 
-  const handleSubmit=(e)=>{
+      if (data.success) {
+        loadCreditData();
+        return data.resultImage;
+      }
+      else {
+        toast.error(data.message)
+        loadCreditData();
+        if (credit === 0) {
+          navigate('/buycredit');
+        }
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+  const handleSubmit = async(e) => {
     e.preventDefault();
+    setLoading(true);
+
+    if (input) {
+      const image = await generateImage(input);
+      if (image) {
+        setIsImageLoaded(true);
+        setImage(image)
+      }
+    }
+    setLoading(false);
   }
 
   return (
-     <motion.form
+    <motion.form
       initial={{ opacity: 0.2, y: 100 }}
       transition={{ duration: 1 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -24,9 +56,8 @@ const Result = () => {
         <div className="relative">
           <img className="max-w-sm rounded" src={image} />
           <span
-            className={`absolute bottom-0 left-0 h-1 bg-blue-400 ${
-              loading ? "w-full transition-all duration-[10s]" : "w-0"
-            }`}
+            className={`absolute bottom-0 left-0 h-1 bg-blue-400 ${loading ? "w-full transition-all duration-[10s]" : "w-0"
+              }`}
           ></span>
         </div>
         <p className={!loading ? "hidden" : ""}>Loading...</p>

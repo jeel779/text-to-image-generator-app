@@ -31,7 +31,7 @@ const loginUser=async(req,res)=>{
   try{
    const {email,password}=req.body
     if( !email || !password){
-      return res.json({success:false,message:"Please enter all the values"})
+      return res.status(400).json({success:false,message:"Please enter all the values"})
     }
     const user=await User.findOne({email})
     if(!user){
