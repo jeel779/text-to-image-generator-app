@@ -6,7 +6,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Login from './components/Login'
 import { useAppContext } from './context/AppContext'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer} from 'react-toastify';
 const App = () => {
   const {showLogin}=useAppContext()
   return (
