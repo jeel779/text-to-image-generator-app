@@ -1,6 +1,5 @@
 import React from 'react'
 import { Routes,Route } from 'react-router-dom'
-import BuyCredit from './pages/BuyCredit'
 import Home from './pages/Home'
 import Result from './pages/Result'
 import Navbar from './components/Navbar'
@@ -18,7 +17,6 @@ const App = () => {
       <Routes>
         <Route path='/' element={<Home/>} />
         <Route path='/result' element={<Result/>} />
-        <Route path='/buycredit' element={<BuyCredit/>} />
       </Routes>
       <Footer/>
     </div>
